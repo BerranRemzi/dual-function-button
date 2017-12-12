@@ -1,3 +1,10 @@
+
+/*******************************************************************
+ * 
+ * Written by Berran Remzi | Dec 12, 2017 | https://github.com/bercho
+ * 
+ *******************************************************************/
+
 #include "DualFunctionButton.h"
 
 DualFunctionButton::DualFunctionButton(int buttonP, long longPressT) {

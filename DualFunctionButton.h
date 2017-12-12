@@ -1,3 +1,10 @@
+
+/*******************************************************************
+ * 
+ * Written by Berran Remzi | Dec 12, 2017 | https://github.com/bercho
+ * 
+ *******************************************************************/
+
 #ifndef DUALFUNCTIONBUTTON_H
 #define DUALFUNCTIONBUTTON_H
 
