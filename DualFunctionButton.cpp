@@ -1,16 +1,17 @@
 
 /*******************************************************************
  * 
- * Written by Berran Remzi | Dec 12, 2017 | https://github.com/bercho
+ * Written by Berran Remzi | March 22, 2018 | https://github.com/bercho
  * 
  *******************************************************************/
 
 #include "DualFunctionButton.h"
 
-DualFunctionButton::DualFunctionButton(int buttonP, long longPressT) {
+DualFunctionButton::DualFunctionButton(int buttonP, long longPressT, char inputMode) {
+  this-> mode = inputMode;
   this-> buttonPin = buttonP;
   this-> longPressTime = longPressT;
-  pinMode(this-> buttonPin, INPUT);
+  pinMode(this-> buttonPin, inputMode);
 }
 
 bool DualFunctionButton::longPress() {
@@ -32,7 +33,8 @@ bool DualFunctionButton::shortPress() {
 }
 
 void DualFunctionButton::evaluatePress() {
-  if (digitalRead(this->buttonPin) == HIGH) {
+  bool pinStatus = digitalRead(this->buttonPin);
+  if ((pinStatus == HIGH && this->mode==INPUT) || (pinStatus == LOW && this->mode==INPUT_PULLUP)) {
     if (this->buttonActive == false) {
       this->buttonActive = true;
       this->buttonTimer = millis();

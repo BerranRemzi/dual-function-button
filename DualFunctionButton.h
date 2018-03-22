@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * 
- * Written by Berran Remzi | Dec 12, 2017 | https://github.com/bercho
+ * Written by Berran Remzi | March 22, 2018 | https://github.com/bercho
  * 
  *******************************************************************/
 
@@ -12,13 +12,17 @@
 
 class DualFunctionButton {
   public:
-    DualFunctionButton(int buttonP, long longPressT);
+    DualFunctionButton(int buttonP, long longPressT){
+        DualFunctionButton(buttonP, longPressT, (char)INPUT);
+    };
+    DualFunctionButton(int buttonP, long longPressT, char inputMode);
     bool longPress();
     bool shortPress();
     void evaluatePress();
     
   private:
     int buttonPin;
+    char mode;
     boolean outputOneState = false;
     boolean outputTwoState = false;
     boolean shortPressDetected = false;
