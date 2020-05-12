@@ -1,31 +1,33 @@
-/*
-  LedSwitch - exbuamle program for using dual function on one button
-  
-  last modified: 12.12.2017
-
-  Author: Berran Remzi
-  https://github.com/bercho
-*/
+// Copyright 2020 Berran Remzi
+/**
+ * @file LedSwitch.ino
+ * @brief Example program for two function with one button
+ * @author Berran Remzi
+ * @link https://github.com/BerranRemzi
+ *
+ * @date 13.05.2020
+ */
 
 #include "DualFunctionButton.h"
 
-#define LED 13
-#define buttonInput 7
+#define LED_EXTERNAL  (11)
+#define BUTTON_PIN    (7)
 
-DualFunctionButton button(buttonInput, 1000);
+DualFunctionButton button(BUTTON_PIN, 500, INPUT);
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(LED, OUTPUT);
-  pinMode(buttonInput, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_EXTERNAL, OUTPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   if (button.shortPress()) {
-    digitalWrite(LED, HIGH);
+    digitalWrite(LED_BUILTIN, HIGH);
   }
   if (button.longPress()) {
-    digitalWrite(LED, LOW);
+    digitalWrite(LED_BUILTIN, LOW);
   }
+  digitalWrite(LED_EXTERNAL, digitalRead(BUTTON_PIN));
 }
