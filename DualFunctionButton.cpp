@@ -11,62 +11,67 @@
 
 #include "DualFunctionButton.h"
 
-DualFunctionButton::DualFunctionButton(int buttonP, long longPressT, char inputMode) {
+DualFunctionButton::DualFunctionButton(int _buttonPin, long _longPressDebounceDelay, char _inputMode) {
   asm("nop");
-  if(inputMode == INPUT_PULLUP){
-    this->buttonPressed = LOW;
+  if(_inputMode == INPUT_PULLUP){
+    this->buttonActiveLevel = LOW;
   }
-  this->mode = inputMode;
-  this->buttonPin = buttonP;
-  this->longPressDebounceDelay = longPressT;
-  pinMode(this-> buttonPin, inputMode);
+  this->mode = _inputMode;
+  this->buttonPin = _buttonPin;
+  this->longPressDebounceDelay = _longPressDebounceDelay;
+  pinMode(this-> buttonPin, _inputMode);
 }
 
 bool DualFunctionButton::longPress() {
-  evaluatePress();
-  if (this->longPressDetected == 1) {
-    this->longPressDetected = 0;
-    return true;
+  bool returnValue = false;
+  EvaluateButtonPress();
+  if (this->isLongPressDetected == true) {
+    this->isLongPressDetected = false;
+    returnValue = true;
   }
-  else return 0;
+
+  return returnValue;
 }
 
 bool DualFunctionButton::shortPress() {
-  evaluatePress();
-  if (this->shortPressDetected == 1) {
-    this->shortPressDetected = 0;
-    return true;
+  bool returnValue = false;
+  EvaluateButtonPress();
+  if (this->isShortPressDetected == true) {
+    this->isShortPressDetected = false;
+    returnValue = true;
   }
-  else return 0;
+
+  return returnValue;
 }
 
-void DualFunctionButton::evaluatePress() {
-  bool pinStatus = digitalRead(this->buttonPin);
-  if(pinStatus == this->buttonPressed){
+void DualFunctionButton::EvaluateButtonPress() {
+  bool pinState = digitalRead(this->buttonPin);
+  if(pinState == this->buttonActiveLevel){
     uint32_t currentMillis = millis();
 
-    if(oldPinStatus != pinStatus){
+    if(this->oldPinState != pinState){
       this->previousMillis = currentMillis;
     }
-    if (((uint32_t)(currentMillis - this->previousMillis) > this->shortPressDebounceDelay) && (this->buttonActive == false)) {
-      this->buttonActive = true;
+    
+    uint32_t timePassed = (uint32_t)(currentMillis - this->previousMillis);
+
+    if ((timePassed > this->shortPressDebounceDelay) && (this->isButtonActive == false)) {
+      this->isButtonActive = true;
     }
-    if (((uint32_t)(currentMillis - this->previousMillis) > this->longPressDebounceDelay) && (this->longPressActive == false)) {
-      this->longPressActive = true;
-      this->longPressDetected = true;
+    if ((timePassed > this->longPressDebounceDelay) && (this->isLongPressActive == false)) {
+      this->isLongPressActive = true;
+      this->isLongPressDetected = true;
     }
   } else {
-    if (this->buttonActive == true) {
-      if (this->longPressActive == true) {
-        this->longPressActive = false;
+    if (this->isButtonActive == true) {
+      if (this->isLongPressActive == true) {
+        this->isLongPressActive = false;
       }
       else {
-        this->shortPressDetected = true;
+        this->isShortPressDetected = true;
       }
-      this->buttonActive = false;
+      this->isButtonActive = false;
     }
   }
-  oldPinStatus = pinStatus;
+  oldPinState = pinState;
 }
-
-

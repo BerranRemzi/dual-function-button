@@ -16,13 +16,13 @@
 
 class DualFunctionButton {
   public:
-    DualFunctionButton(int buttonP, long longPressT){
-        DualFunctionButton(buttonP, longPressT, INPUT);
+    DualFunctionButton(int _buttonPin, long _longPressDebounceDelay){
+        DualFunctionButton(_buttonPin, _longPressDebounceDelay, INPUT);
     };
-    DualFunctionButton(int buttonP, long longPressT, char inputMode);
+    DualFunctionButton(int _buttonPin, long _longPressDebounceDelay, char _inputMode);
     bool longPress();
     bool shortPress();
-    void evaluatePress();
+    
     void SetDebounceTimeShort(uint16_t _debounceDelay){
       this->shortPressDebounceDelay = _debounceDelay;
     }
@@ -30,22 +30,21 @@ class DualFunctionButton {
       this->longPressDebounceDelay = _debounceDelay;
     }
   
-    
     private:
+    void EvaluateButtonPress();
+
     int buttonPin = -1;
     char mode = INPUT;
-    boolean outputOneState = false;
-    boolean outputTwoState = false;
-    boolean shortPressDetected = false;
-    boolean longPressDetected = false;
+    boolean isShortPressDetected = false;
+    boolean isLongPressDetected = false;
+    boolean isButtonActive = false;
     unsigned long previousMillis = 0;
     unsigned int longPressDebounceDelay = 250;
     unsigned int shortPressDebounceDelay = 50;
-    boolean buttonPressed = HIGH; /* default pressed value is HIGH*/
-
-    boolean buttonActive = false;
-    boolean longPressActive = false;
-    boolean oldPinStatus = LOW;
+    boolean buttonActiveLevel = HIGH; /* default pressed value is HIGH*/
+    
+    boolean isLongPressActive = false;
+    boolean oldPinState = LOW;
 };
 
 #endif /* DUALFUNCTIONBUTTON_H */
